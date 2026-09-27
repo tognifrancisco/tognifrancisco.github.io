@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Channel Temperature Control — Francisco Togni</title>
+  <meta name="description" content="Six-channel SSR burst-fire temperature control for industrial laboratory flasks.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>Multi-Channel Temperature Control</h1>
+    <p class="tagline">Industrial lab flasks · 6 channels · SSR burst-fire</p>
+    <p class="subtitle">Industrial instrumentation · 2026</p>
+    <a class="back-link" href="../index.html">← Back to portfolio</a>
+  </div>
+</header>
+
+<div class="container project-detail">
+
+  <section>
+    <span class="status status-delivered">Delivered · 2026</span>
+    <h2>Overview</h2>
+    <p class="overview">
+      A six-channel simultaneous temperature control system for industrial 
+      laboratory flasks, using SSR-based burst-fire actuation and NTC 
+      temperature sensing. Local UI with 7-segment display and rotary 
+      encoder. Designed for continuous industrial operation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>
+      Laboratory processes require precise, stable temperature control 
+      across multiple flasks simultaneously. Phase-angle control of SSR 
+      heaters injects electrical noise that can affect sensitive 
+      measurement instruments. A cleaner actuation strategy was needed.
+    </p>
+  </section>
+
+  <section>
+    <h2>Solution</h2>
+    <p>
+      An SSR burst-fire control strategy with a 500 ms window: instead of 
+      chopping the AC waveform, the controller switches the SSR on and off 
+      over complete mains cycles, delivering the required average power 
+      while generating no phase-angle switching noise. Six independent 
+      channels run simultaneously on a single STM32.
+    </p>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <ul>
+      <li><strong>Controller:</strong> STM32 Black Pill (ARM Cortex-M)</li>
+      <li><strong>Channels:</strong> 6 independent temperature loops</li>
+      <li><strong>Actuation:</strong> SSR burst-fire, 500 ms window</li>
+      <li><strong>Sensing:</strong> NTC thermistors</li>
+      <li><strong>UI:</strong> 7-segment display + rotary encoder</li>
+      <li><strong>Target:</strong> continuous industrial operation</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My role</h2>
+    <p>
+      Firmware design and implementation on STM32, burst-fire control 
+      algorithm, NTC linearization, multi-channel scheduling, UI 
+      integration (7-segment + encoder), and full system validation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <ul>
+      <li>6 channels controlled simultaneously on a single MCU</li>
+      <li>Low-noise SSR burst-fire actuation</li>
+      <li>Continuous industrial operation</li>
+      <li>Local UI with encoder-based parameter setting</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <div class="stack">
+      <span>STM32</span>
+      <span>Embedded C</span>
+      <span>SSR</span>
+      <span>Burst-fire control</span>
+      <span>NTC</span>
+      <span>Industrial Control</span>
+      <span>Multi-channel</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Media</h2>
+    <p><em>Media coming soon — panel photo, UI screenshots, control loop response.</em></p>
+  </section>
+
+</div>
+
+<footer class="container">
+  <p><a href="../index.html">← Back to portfolio</a></p>
+</footer>
+
+</body>
+</html>
