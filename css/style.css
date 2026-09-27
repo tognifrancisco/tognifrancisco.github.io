@@ -7,9 +7,9 @@
    TOKENS — Light mode (default)
    ============================================ */
 :root {
-  --primary: #004f90;
-  --primary-hover: #003a6b;
-  --accent-light: #eaf2fa;
+  --primary: #0f766e;              /* teal-700 */
+  --primary-hover: #115e59;        /* teal-800 */
+  --accent-light: #d9f2ee;         /* light teal tint */
 
   --text: #1a1a1a;
   --text-muted: #666;
@@ -20,7 +20,7 @@
   --border: #e5e5e5;
   --border-strong: #d0d0d0;
 
-  --hero-bg: #004f90;
+  --hero-bg: #0f766e;
   --hero-text: #ffffff;
   --hero-muted: rgba(255,255,255,0.85);
   --hero-border: rgba(255,255,255,0.35);
@@ -45,9 +45,9 @@
    TOKENS — Dark mode
    ============================================ */
 [data-theme="dark"] {
-  --primary: #4a9eff;
-  --primary-hover: #6bb0ff;
-  --accent-light: #1a2734;
+  --primary: #2dd4bf;              /* teal-400 */
+  --primary-hover: #5eead4;        /* teal-300 */
+  --accent-light: #14312e;         /* dark teal tint */
 
   --text: #e8e8e8;
   --text-muted: #a0a0a0;
@@ -68,24 +68,22 @@
 }
 
 /* ============================================
-   BASE
+   BASE — body en SERIF
    ============================================ */
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 16px;
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition), color var(--transition);
-  counter-reset: section;   /* contador para numeración de secciones */
+  counter-reset: section;
 }
 
-/* .container: SOLO padding horizontal.
-   El padding vertical se maneja por section.container */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -184,6 +182,7 @@ code, pre {
 }
 
 .hero .subtitle {
+  font-family: var(--font-sans);
   font-size: 0.92rem;
   opacity: 0.7;
   font-style: italic;
@@ -199,6 +198,7 @@ code, pre {
 }
 
 .links a {
+  font-family: var(--font-sans);
   color: var(--hero-text);
   text-decoration: none;
   border-bottom: 1px solid var(--hero-border);
@@ -226,7 +226,6 @@ section:last-of-type {
   border-bottom: none;
 }
 
-/* Secciones top-level con .container en el home */
 section.container {
   padding-top: 110px;
   padding-bottom: 110px;
@@ -245,8 +244,6 @@ section h2 {
   gap: 18px;
 }
 
-/* Marcador: numeración mono 01, 02, 03...
-   Solo para secciones top-level del home (excluye project-detail) */
 section h2 {
   counter-increment: section;
 }
@@ -256,7 +253,7 @@ section h2::before {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--primary);
-  opacity: 0.55;
+  opacity: 0.6;
   font-weight: 500;
   letter-spacing: 0.5px;
   flex-shrink: 0;
@@ -277,7 +274,8 @@ section h2::before {
    ABOUT
    ============================================ */
 .about p {
-  font-size: 1.05rem;
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
   color: var(--text);
   max-width: 720px;
   line-height: 1.85;
@@ -321,6 +319,7 @@ section h2::before {
 }
 
 .project .meta {
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--text-muted);
   margin-bottom: 16px;
@@ -329,9 +328,10 @@ section h2::before {
 }
 
 .project p {
+  font-family: var(--font-serif);
   margin-bottom: 14px;
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-size: 1.02rem;
+  line-height: 1.8;
 }
 
 .project .tags {
@@ -353,11 +353,12 @@ section h2::before {
 }
 
 .publications li {
+  font-family: var(--font-serif);
   margin-bottom: 28px;
   padding-left: 24px;
   position: relative;
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-size: 1.02rem;
+  line-height: 1.8;
 }
 
 .publications li:last-child {
@@ -368,7 +369,7 @@ section h2::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 11px;
+  top: 12px;
   width: 8px;
   height: 8px;
   background: var(--primary);
@@ -395,26 +396,28 @@ section h2::before {
    SKILLS
    ============================================ */
 .skills p {
+  font-family: var(--font-serif);
   margin-bottom: 16px;
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-size: 1.02rem;
+  line-height: 1.8;
 }
 
 .skills strong {
   font-family: var(--font-mono);
   color: var(--primary);
   font-weight: 500;
-  font-size: 0.85em;
+  font-size: 0.82em;
   letter-spacing: 0.3px;
   text-transform: uppercase;
   display: inline-block;
-  min-width: 140px;
+  min-width: 145px;
 }
 
 /* ============================================
    FOOTER
    ============================================ */
 footer {
+  font-family: var(--font-sans);
   padding: 60px 0 52px;
   text-align: center;
   color: var(--text-muted);
@@ -464,15 +467,17 @@ footer a:hover {
 }
 
 .project-detail .overview {
-  font-size: 1.1rem;
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
   color: var(--text);
   margin-bottom: 8px;
   line-height: 1.85;
 }
 
 .project-detail p {
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.8;
   margin-bottom: 12px;
 }
 
@@ -482,11 +487,12 @@ footer a:hover {
 }
 
 .project-detail ul li {
+  font-family: var(--font-serif);
   padding-left: 26px;
   position: relative;
   margin-bottom: 14px;
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-size: 1.02rem;
+  line-height: 1.8;
 }
 
 .project-detail ul li::before {
@@ -554,11 +560,12 @@ footer a:hover {
 .status-completed  { background: #e2e3e5; color: #383d41; }
 
 [data-theme="dark"] .status-published  { background: #1e3d28; color: #7fe0a0; }
-[data-theme="dark"] .status-delivered  { background: #16324d; color: #7fc3ff; }
+[data-theme="dark"] .status-delivered  { background: #14312e; color: #5eead4; }
 [data-theme="dark"] .status-validation { background: #3d3216; color: #ffd97f; }
 [data-theme="dark"] .status-completed  { background: #2a2e33; color: #b0b0b0; }
 
 .back-link {
+  font-family: var(--font-sans);
   display: inline-block;
   margin-top: 18px;
   color: var(--hero-text);
