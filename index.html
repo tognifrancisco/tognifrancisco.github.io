@@ -3,11 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Francisco Togni — FPGA · DSP · Embedded R&D</title>
+  <title>Francisco Togni — FPGA · DSP · Embedded R&amp;D</title>
   <meta name="description" content="Electrical Engineer specialized in FPGA and DSP for real-time systems. Audio DSP, embedded R&D, power electronics.">
+
+  <!-- Theme color for browser UI (mobile) -->
+  <meta name="theme-color" content="#0f1419">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Theme — dark mode forzado por defecto, con override manual persistente -->
+  <script>
+    (function () {
+      const stored = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', stored || 'dark');
+    })();
+  </script>
 </head>
 <body>
+
+<button class="theme-toggle" aria-label="Switch theme"></button>
 
 <header class="hero">
   <div class="container">
@@ -16,9 +36,9 @@
     <p class="subtitle">Audio DSP &amp; FPGA-based real-time systems</p>
     <nav class="links">
       <a href="mailto:tognifrancisco@gmail.com">Email</a>
-      <a href="https://linkedin.com/in/tognifrancisco" target="_blank">LinkedIn</a>
-      <a href="https://github.com/tognifrancisco" target="_blank">GitHub</a>
-      <a href="assets/pdf/Francisco_Togni_CV.pdf" target="_blank">CV</a>
+      <a href="https://linkedin.com/in/tognifrancisco" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/tognifrancisco" target="_blank" rel="noopener">GitHub</a>
+      <a href="assets/pdf/Francisco_Togni_CV.pdf" target="_blank" rel="noopener">CV</a>
     </nav>
   </div>
 </header>
@@ -105,23 +125,23 @@
   <h2>Publications</h2>
   <ul>
     <li>
-      F. Togni et al., "<a href="https://ieeexplore.ieee.org/document/11450328" target="_blank">Low-Latency Architecture for Open-Circuit Fault Diagnosis in Electric Drive Inverter Power Switches</a>," in <em>Proc. 8th Argentine Conference on Electronics (CAE)</em>, UNT, 2026.
+      F. Togni et al., "<a href="https://ieeexplore.ieee.org/document/11450328" target="_blank" rel="noopener">Low-Latency Architecture for Open-Circuit Fault Diagnosis in Electric Drive Inverter Power Switches</a>," in <em>Proc. 8th Argentine Conference on Electronics (CAE)</em>, UNT, 2026.
     </li>
     <li>
-      F. Togni et al., "<a href="https://www.researchgate.net/publication/375450327" target="_blank">Digital Audio Equalizer Implementation using an FPGA with FIR Filter Bank Structure and 4-Level PWM-Based Output DAC Topology</a>," in <em>Proc. 28th AADECA Congress</em>, 2023.
+      F. Togni et al., "<a href="https://www.researchgate.net/publication/375450327" target="_blank" rel="noopener">Digital Audio Equalizer Implementation using an FPGA with FIR Filter Bank Structure and 4-Level PWM-Based Output DAC Topology</a>," in <em>Proc. 28th AADECA Congress</em>, 2023.
     </li>
   </ul>
 </section>
 
 <section class="skills container">
   <h2>Skills</h2>
-  <p><strong>Programming:</strong> C, Verilog, Python</p>
-  <p><strong>FPGA / HDL:</strong> Xilinx Vivado, RTL synthesis &amp; optimization, timing analysis, HDL/IP integration, FPGA-based DSP</p>
-  <p><strong>Embedded:</strong> ARM Cortex-M, TI C2000 (TMS320F280049), STM32, PIC</p>
-  <p><strong>DSP:</strong> FIR filter banks, adaptive decimation, Volterra kernels, PCA, real-time convolution, PWM-based DAC</p>
-  <p><strong>Hardware:</strong> ADC/DAC, DMA, SRAM, analog signal conditioning, motor control, power electronics, fault detection</p>
-  <p><strong>Protocols:</strong> I²C, I²S, SPI, UART/RS-485, USB, Modbus RTU/TCP</p>
-  <p><strong>Tools:</strong> Altium Designer, SolidWorks, MATLAB/Simulink</p>
+  <p><strong>Programming</strong> C, Verilog, Python</p>
+  <p><strong>FPGA / HDL</strong> Xilinx Vivado, RTL synthesis &amp; optimization, timing analysis, HDL/IP integration, FPGA-based DSP</p>
+  <p><strong>Embedded</strong> ARM Cortex-M, TI C2000 (TMS320F280049), STM32, PIC</p>
+  <p><strong>DSP</strong> FIR filter banks, adaptive decimation, Volterra kernels, PCA, real-time convolution, PWM-based DAC</p>
+  <p><strong>Hardware</strong> ADC/DAC, DMA, SRAM, analog signal conditioning, motor control, power electronics, fault detection</p>
+  <p><strong>Protocols</strong> I²C, I²S, SPI, UART/RS-485, USB, Modbus RTU/TCP</p>
+  <p><strong>Tools</strong> Altium Designer, SolidWorks, MATLAB/Simulink</p>
 </section>
 
 <footer class="container">
@@ -131,6 +151,8 @@
   </p>
   <p class="copyright">© 2026 Francisco Togni</p>
 </footer>
+
+<script src="js/theme.js"></script>
 
 </body>
 </html>
