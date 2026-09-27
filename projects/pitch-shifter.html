@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Pitch Shifter — Francisco Togni</title>
+  <meta name="description" content="Real-time pitch shifter on STM32 with 2 ms latency, correlated to musical intervals.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>Real-Time Pitch Shifter</h1>
+    <p class="tagline">Adaptive decimation · 2 ms latency · STM32</p>
+    <p class="subtitle">Embedded DSP · 2023</p>
+    <a class="back-link" href="../index.html">← Back to portfolio</a>
+  </div>
+</header>
+
+<div class="container project-detail">
+
+  <section>
+    <span class="status status-completed">Completed · 2023</span>
+    <h2>Overview</h2>
+    <p class="overview">
+      A real-time pitch shifter implemented on an STM32 Black Pill 
+      microcontroller, correlated to musical intervals in both just 
+      and equal temperament scales. The system achieves 2 ms end-to-end 
+      latency at 44.1 kHz sampling.
+    </p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>
+      Real-time pitch shifting usually involves trade-offs between latency, 
+      quality, and computational cost. Achieving low latency on a 
+      microcontroller (rather than a dedicated DSP or FPGA) requires an 
+      efficient algorithm and careful firmware optimization.
+    </p>
+  </section>
+
+  <section>
+    <h2>Solution</h2>
+    <p>
+      An adaptive decimation algorithm that shifts the pitch in musical 
+      intervals rather than arbitrary frequency ratios. This allows the 
+      pitch shift to remain musically coherent across the scale (both 
+      just and equal temperament), while keeping the computational cost 
+      low enough to run in real time on an ARM Cortex-M4F.
+    </p>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <ul>
+      <li><strong>Platform:</strong> STM32 Black Pill (ARM Cortex-M4F)</li>
+      <li><strong>Language:</strong> C firmware</li>
+      <li><strong>Sampling rate:</strong> 44.1 kHz</li>
+      <li><strong>End-to-end latency:</strong> 2 ms</li>
+      <li><strong>Algorithm:</strong> adaptive decimation correlated to musical intervals</li>
+      <li><strong>Scales:</strong> just intonation and equal temperament</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My role</h2>
+    <p>
+      R&amp;D of the pitch shifting algorithm, C firmware implementation, 
+      optimization for real-time operation on ARM Cortex-M4F, and latency 
+      characterization.
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <ul>
+      <li>End-to-end latency: 2 ms</li>
+      <li>44.1 kHz sampling on ARM Cortex-M4F</li>
+      <li>Musically coherent shifting in just and equal temperament</li>
+      <li>Real-time operation on low-cost MCU (no dedicated DSP)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <div class="stack">
+      <span>STM32</span>
+      <span>ARM Cortex-M4F</span>
+      <span>Embedded C</span>
+      <span>DSP</span>
+      <span>Real-Time Audio</span>
+      <span>Adaptive Decimation</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Media</h2>
+    <p><em>Media coming soon — audio samples, algorithm block diagram, latency measurement.</em></p>
+  </section>
+
+</div>
+
+<footer class="container">
+  <p><a href="../index.html">← Back to portfolio</a></p>
+</footer>
+
+</body>
+</html>
