@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPGA Fault Detection for Power Inverters — Francisco Togni</title>
+  <meta name="description" content="Low-latency FPGA architecture for open-switch fault detection in electric drive power inverters.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>Low-Latency Fault Detection for Power Inverters</h1>
+    <p class="tagline">FPGA-based open-switch diagnosis in electric drives</p>
+    <p class="subtitle">Published at CAE 2026 — G.E.A., UNRC</p>
+    <a class="back-link" href="../index.html">← Back to portfolio</a>
+  </div>
+</header>
+
+<div class="container project-detail">
+
+  <section>
+    <span class="status status-published">Published · CAE 2026</span>
+    <h2>Overview</h2>
+    <p class="overview">
+      An FPGA architecture for real-time open-switch fault detection in 
+      power semiconductor devices used in electric drive inverters. The 
+      design achieves detection latency as low as 10% of the electrical 
+      period, using only 5% of FPGA resources at a 100 MHz base clock.
+    </p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>
+      Open-switch faults in inverter power semiconductors can cause 
+      degraded torque, overcurrent in healthy phases, and cascading 
+      failures if not detected quickly. Conventional software-based 
+      diagnosis runs on the main controller and introduces latency that 
+      may be too high for high-dynamic electric drives.
+    </p>
+  </section>
+
+  <section>
+    <h2>Solution</h2>
+    <p>
+      A dedicated FPGA architecture that executes the fault detection 
+      algorithm in hardware, parallel to the main control loop. The design 
+      is pipelined for minimum latency and integrated with the power stage 
+      for hardware validation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <ul>
+      <li><strong>Target:</strong> Xilinx FPGA (Vivado flow)</li>
+      <li><strong>Language:</strong> Verilog / HDL-RTL</li>
+      <li><strong>Algorithm:</strong> real-time open-switch detection based on current signature analysis</li>
+      <li><strong>Base clock:</strong> 100 MHz</li>
+      <li><strong>Resource usage:</strong> ~5% of FPGA</li>
+      <li><strong>Detection latency:</strong> 10% of electrical period (varies with drive operating frequency)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My role</h2>
+    <p>
+      R&D and FPGA implementation: algorithm study, RTL design, pipelining 
+      and optimization, timing closure, integration with the power 
+      electronics hardware, and validation. Co-author of the resulting 
+      publication.
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <ul>
+      <li>Detection latency: 10% of the electrical period</li>
+      <li>FPGA resource usage: 5% at 100 MHz base clock</li>
+      <li>Hardware-validated on a real electric drive</li>
+      <li>Published in Proc. 8th Argentine Conference on Electronics (CAE), UNT, 2026</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Publication</h2>
+    <p>
+      F. Togni et al., "Low-Latency Architecture for Open-Circuit Fault 
+      Diagnosis in Electric Drive Inverter Power Switches," in 
+      <em>Proc. 8th Argentine Conference on Electronics (CAE)</em>, UNT, 2026.
+    </p>
+    <p>
+      <a href="https://ieeexplore.ieee.org/document/11450328" target="_blank">Read on IEEE Xplore →</a>
+    </p>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <div class="stack">
+      <span>Verilog</span>
+      <span>Xilinx Vivado</span>
+      <span>RTL Design</span>
+      <span>Timing Analysis</span>
+      <span>FPGA</span>
+      <span>DSP</span>
+      <span>Power Electronics</span>
+      <span>Electric Drives</span>
+      <span>Fault Detection</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Media</h2>
+    <p><em>Media coming soon — architecture diagram, Vivado timing report, hardware setup.</em></p>
+  </section>
+
+</div>
+
+<footer class="container">
+  <p><a href="../index.html">← Back to portfolio</a></p>
+</footer>
+
+</body>
+</html>
