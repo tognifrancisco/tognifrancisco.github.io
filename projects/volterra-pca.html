@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volterra Kernels + PCA — Francisco Togni</title>
+  <meta name="description" content="Amplitude-dependent nonlinear system identification and real-time synthesis on FPGA.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>Nonlinear System Identification &amp; Real-Time Synthesis</h1>
+    <p class="tagline">Volterra kernels + PCA on FPGA</p>
+    <p class="subtitle">Validation phase — to be published</p>
+    <a class="back-link" href="../index.html">← Back to portfolio</a>
+  </div>
+</header>
+
+<div class="container project-detail">
+
+  <section>
+    <span class="status status-validation">Validation phase</span>
+    <h2>Overview</h2>
+    <p class="overview">
+      A method for identifying amplitude-dependent nonlinear systems using 
+      Volterra kernels and Principal Component Analysis, and a dedicated 
+      FPGA architecture for real-time synthesis. The system targets audio 
+      applications where nonlinearity depends on the excitation level.
+    </p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>
+      Many real-world audio systems — loudspeakers, amplifiers, transducers — 
+      exhibit nonlinear behavior that depends on the excitation amplitude. 
+      Classical linear identification fails to capture this. Full Volterra 
+      models are powerful but computationally prohibitive for real-time 
+      implementation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Solution</h2>
+    <p>
+      Identification is performed from impulse responses captured at varying 
+      excitation levels. PCA is applied to collapse the trajectory of Volterra 
+      kernels into a compact set of coefficients, drastically reducing the 
+      computational cost. The resulting representation is implemented as a 
+      single pipelined convolution engine on FPGA.
+    </p>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <ul>
+      <li><strong>Identification:</strong> Volterra kernels from impulse responses at multiple excitation levels</li>
+      <li><strong>Compression:</strong> PCA score collapse of kernel trajectories</li>
+      <li><strong>Real-time hardware:</strong> FPGA-based parallelized, pipelined single-convolution engine</li>
+      <li><strong>Validation platform:</strong> STM32 Black Pill + Xilinx Artix / Sipeed Tang FPGA</li>
+      <li><strong>Application:</strong> real-time synthesis of amplitude-dependent nonlinear audio systems</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My role</h2>
+    <p>
+      Full R&amp;D: formulation of the identification method, PCA-based 
+      compression, hardware architecture design, RTL implementation, and 
+      hardware validation. Publication in progress.
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <ul>
+      <li>Compact representation of amplitude-dependent nonlinear systems</li>
+      <li>Single-convolution real-time synthesis on FPGA</li>
+      <li>Hardware validation in progress (STM32 + FPGA platform)</li>
+      <li>Publication in preparation</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <div class="stack">
+      <span>Volterra Kernels</span>
+      <span>PCA</span>
+      <span>FPGA</span>
+      <span>Verilog</span>
+      <span>STM32</span>
+      <span>Real-Time Convolution</span>
+      <span>DSP</span>
+      <span>Audio Synthesis</span>
+      <span>MATLAB / Python</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Media</h2>
+    <p><em>Media coming soon — kernel trajectories, PCA plots, FPGA block diagram, hardware setup.</em></p>
+  </section>
+
+</div>
+
+<footer class="container">
+  <p><a href="../index.html">← Back to portfolio</a></p>
+</footer>
+
+</body>
+</html>
