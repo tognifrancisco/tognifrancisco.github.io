@@ -83,10 +83,14 @@ body {
   transition: background-color var(--transition), color var(--transition);
 }
 
+/* .container: SOLO padding horizontal.
+   El padding vertical se maneja por section.container o section dentro de
+   un .container (caso de project-detail). */
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding-left: 28px;
+  padding-right: 28px;
 }
 
 a {
@@ -211,16 +215,24 @@ code, pre {
 }
 
 /* ============================================
-   SECTIONS — mucho más aire vertical
+   SECTIONS — padding vertical efectivo
    ============================================ */
+
+/* Base para section sin container (caso project-detail) */
 section {
-  padding: 110px 0;
   border-bottom: 1px solid var(--border);
   transition: border-color var(--transition);
 }
 
 section:last-of-type {
   border-bottom: none;
+}
+
+/* FIX: secciones top-level con .container.
+   Selector section.container gana a .container por especificidad. */
+section.container {
+  padding-top: 110px;
+  padding-bottom: 110px;
 }
 
 section h2 {
@@ -257,7 +269,7 @@ section h2::before {
 }
 
 /* ============================================
-   PROJECTS — espaciado entre proyectos se mantiene
+   PROJECTS
    ============================================ */
 .project {
   margin-bottom: 52px;
@@ -416,9 +428,18 @@ footer a:hover {
 
 /* ============================================
    PROJECT DETAIL PAGES
+   (sections están dentro de .container.project-detail)
    ============================================ */
 .project-detail section {
   padding: 72px 0;
+}
+
+.project-detail section:first-of-type {
+  padding-top: 0;
+}
+
+.project-detail section:last-of-type {
+  padding-bottom: 0;
 }
 
 .project-detail section h2 {
@@ -543,15 +564,25 @@ footer a:hover {
    RESPONSIVE
    ============================================ */
 @media (max-width: 600px) {
-  .container { padding: 0 20px; }
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
   .hero { padding: 80px 0 60px; }
   .hero h1 { font-size: 2rem; letter-spacing: -0.4px; }
   .hero .tagline { font-size: 1rem; }
   .hero .subtitle { font-size: 0.86rem; }
 
-  section { padding: 80px 0; }
-  section h2 { font-size: 1.35rem; margin-bottom: 36px; }
+  section.container {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 36px;
+  }
 
   .project { margin-bottom: 40px; padding-bottom: 34px; }
   .project h3 { font-size: 1.12rem; }
@@ -591,6 +622,7 @@ footer a:hover {
   .theme-toggle, .back-link { display: none; }
   body { background: white; color: black; }
   section { border-bottom: none; padding: 20px 0; }
+  section.container { padding-top: 20px; padding-bottom: 20px; }
   .hero { background: white; color: black; padding: 20px 0; }
   .hero h1 { color: black; }
 }
