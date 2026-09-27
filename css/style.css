@@ -229,3 +229,99 @@ footer a:hover {
   .links { gap: 16px; }
   .links a { font-size: 0.85rem; }
 }
+
+
+/* Project detail pages */
+.project-detail section {
+  padding: 32px 0;
+}
+
+.project-detail section h2 {
+  font-size: 1.15rem;
+  margin-bottom: 14px;
+}
+
+.project-detail .overview {
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.project-detail ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.project-detail ul li {
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.project-detail ul li:before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.project-detail .stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.project-detail .stack span {
+  background: #eaf2fa;
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.project-detail .media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.project-detail .media-grid img,
+.project-detail .media-grid video {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.project-detail .status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status-published { background: #d4edda; color: #155724; }
+.status-delivered { background: #cce5ff; color: #004085; }
+.status-validation { background: #fff3cd; color: #856404; }
+.status-completed { background: #e2e3e5; color: #383d41; }
+
+.back-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 2px;
+}
+
+.back-link:hover {
+  border-bottom-color: white;
+}
