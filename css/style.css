@@ -81,11 +81,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition), color var(--transition);
+  counter-reset: section;   /* contador para numeración de secciones */
 }
 
 /* .container: SOLO padding horizontal.
-   El padding vertical se maneja por section.container o section dentro de
-   un .container (caso de project-detail). */
+   El padding vertical se maneja por section.container */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -215,10 +215,8 @@ code, pre {
 }
 
 /* ============================================
-   SECTIONS — padding vertical efectivo
+   SECTIONS
    ============================================ */
-
-/* Base para section sin container (caso project-detail) */
 section {
   border-bottom: 1px solid var(--border);
   transition: border-color var(--transition);
@@ -228,8 +226,7 @@ section:last-of-type {
   border-bottom: none;
 }
 
-/* FIX: secciones top-level con .container.
-   Selector section.container gana a .container por especificidad. */
+/* Secciones top-level con .container en el home */
 section.container {
   padding-top: 110px;
   padding-bottom: 110px;
@@ -244,18 +241,36 @@ section h2 {
   font-weight: 400;
   letter-spacing: -0.3px;
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: baseline;
+  gap: 18px;
+}
+
+/* Marcador: numeración mono 01, 02, 03...
+   Solo para secciones top-level del home (excluye project-detail) */
+section h2 {
+  counter-increment: section;
 }
 
 section h2::before {
-  content: "";
-  display: inline-block;
-  width: 4px;
-  height: 24px;
-  background: var(--primary);
-  border-radius: 2px;
+  content: counter(section, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--primary);
+  opacity: 0.55;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Excluir el marcador en las fichas de proyecto */
+.project-detail section h2::before {
+  content: none;
+  display: none;
+}
+
+.project-detail section h2 {
+  counter-increment: none;
 }
 
 /* ============================================
@@ -428,7 +443,6 @@ footer a:hover {
 
 /* ============================================
    PROJECT DETAIL PAGES
-   (sections están dentro de .container.project-detail)
    ============================================ */
 .project-detail section {
   padding: 72px 0;
@@ -582,6 +596,7 @@ footer a:hover {
   section h2 {
     font-size: 1.35rem;
     margin-bottom: 36px;
+    gap: 14px;
   }
 
   .project { margin-bottom: 40px; padding-bottom: 34px; }
@@ -625,4 +640,5 @@ footer a:hover {
   section.container { padding-top: 20px; padding-bottom: 20px; }
   .hero { background: white; color: black; padding: 20px 0; }
   .hero h1 { color: black; }
+  section h2::before { color: black; opacity: 1; }
 }
