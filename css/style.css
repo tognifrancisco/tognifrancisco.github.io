@@ -7,9 +7,9 @@
    TOKENS — Light mode (default)
    ============================================ */
 :root {
-  --primary: #0f766e;              /* teal-700 */
-  --primary-hover: #115e59;        /* teal-800 */
-  --accent-light: #d9f2ee;         /* light teal tint */
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --accent-light: #d9f2ee;
 
   --text: #1a1a1a;
   --text-muted: #666;
@@ -45,9 +45,9 @@
    TOKENS — Dark mode
    ============================================ */
 [data-theme="dark"] {
-  --primary: #2dd4bf;              /* teal-400 */
-  --primary-hover: #5eead4;        /* teal-300 */
-  --accent-light: #14312e;         /* dark teal tint */
+  --primary: #2dd4bf;
+  --primary-hover: #5eead4;
+  --accent-light: #14312e;
 
   --text: #e8e8e8;
   --text-muted: #a0a0a0;
@@ -258,7 +258,6 @@ section h2::before {
   line-height: 1;
 }
 
-/* Excluir el marcador en las fichas de proyecto */
 .project-detail section h2::before {
   content: none;
   display: none;
