@@ -64,25 +64,31 @@
     <p>
       FPGA-based architecture for open-switch fault detection in power 
       semiconductors used in electric drives. Detection latency of 10% of the 
-      electrical period, using 5% of FPGA resources at 100 MHz.
+      electrical period, using approximately 6% of LUTs and 5% of flip-flops 
+      on an Artix-7 XC7A35T at 100 MHz. Validated through MATLAB simulation, 
+      Proteus, hardware-in-the-loop, and bench testing on a 0.75 kW induction 
+      motor drive.
     </p>
     <p class="tags">FPGA · Verilog · Xilinx Vivado · DSP · Power Electronics</p>
   </article>
 
   <article class="project">
-    <h3><a href="projects/volterra-pca.html">Nonlinear System Identification via Volterra Kernels + PCA</a></h3>
-    <p class="meta">2026 · Validation phase</p>
+    <h3><a href="projects/volterra-pca.html">Amplitude-Dependent Nonlinear System Identification via Volterra Kernels and PCA</a></h3>
+    <p class="meta">2026 · Preprint · Validation phase</p>
     <p>
-      Compact representation via PCA score collapse of Volterra kernel 
-      trajectories. FPGA-based parallelized, pipelined single-convolution 
-      engine for real-time synthesis of nonlinear audio systems.
+      Method for identifying and synthesizing amplitude-dependent nonlinear 
+      systems. Identification via exponential swept-sine excitation at multiple 
+      amplitudes, with up to 5 Volterra kernels extracted per measurement. 
+      Continuous amplitude model via PCA with shape-scale separation. Synthesis 
+      based on fixed FIR filter banks weighted by interpolated scores. Real-time 
+      implementation on DSP/FPGA is future work.
     </p>
-    <p class="tags">Volterra Kernels · PCA · FPGA · STM32 · Real-Time Convolution</p>
+    <p class="tags">Volterra Kernels · PCA · ESS · MATLAB · DSP</p>
   </article>
   
   <article class="project">
     <h3><a href="projects/ball-launcher.html">Professional Ball Launcher — Trinquete</a></h3>
-    <p class="meta">2024 – 2026 · Client product (IP retained)</p>
+    <p class="meta">2026 · Client product (IP retained)</p>
     <p>
       End-to-end mechatronic system for professional training. Distributed dual-MCU architecture (TI TMS320F280049 + 
       STM32), Modbus RTU, multi-axis control up to 200 km/h, HMI, sensor telemetry.
@@ -94,20 +100,26 @@
     <h3><a href="projects/audio-equalizer.html">Digital Audio Equalizer on FPGA</a></h3>
     <p class="meta">2023 · Published at AADECA 2023</p>
     <p>
-      160-tap FIR filter bank with 4-level PWM-based output DAC topology. 
-      44.1 kHz sampling, low FPGA resource usage.
+      5-band FIR filter bank (order 170 per band) with symmetric systolic 
+      structure and 4-level PWM-based output DAC topology. One DSP48 slice per 
+      filter. 44.1 kHz sampling, 1.5 ms latency, noise floor −60 dBVrms, 
+      ripple &lt; ±2 dB.
     </p>
     <p class="tags">FPGA · Verilog · FIR · DSP · PWM DAC · Audio</p>
   </article>
 
   <article class="project">
-    <h3><a href="projects/pitch-shifter.html">Real-Time Pitch Shifter</a></h3>
-    <p class="meta">2023</p>
+    <h3><a href="projects/pitch-shifter.html">Time-Domain Pitch Shifting for Real-Time Audio</a></h3>
+    <p class="meta">2023 – 2025</p>
     <p>
-      Real-time pitch shifter correlated to musical intervals (just and equal 
-      temperament scales). TI TM4C123GH6PMI, C firmware, 44.1 kHz, 2 ms latency.
+      Design and validation of two time-domain pitch shifting methods for 
+      embedded platforms. Doppler-based shifter with two crossfaded read 
+      pointers, implemented in C on ARM Cortex-M4F (Tiva C TM4C123G) at 
+      44.1 kHz with 2 ms latency. Weighted granular decimation of an oversampled 
+      buffer (L=4^n), validated in MATLAB simulation at 44.1 kHz. Preprint. 
+      Hardware implementation on STM32 BlackPill planned.
     </p>
-    <p class="tags">TI · Embedded C · DSP · Real-Time Audio</p>
+    <p class="tags">TI TM4C · ARM Cortex-M · MATLAB · DSP · Real-Time Audio</p>
   </article>
 
   <article class="project">
@@ -137,13 +149,15 @@
 
 <section class="skills container">
   <h2>Skills</h2>
-  <p><strong>Programming</strong> C, Verilog, Python</p>
-  <p><strong>FPGA / HDL</strong> Xilinx Vivado, RTL synthesis &amp; optimization, HDL/IP integration, FPGA-based DSP</p>
+  <p><strong>Programming</strong> C, Verilog, Python (basic)</p>
+  <p><strong>FPGA / HDL</strong> Xilinx Vivado, RTL synthesis &amp; optimization, timing analysis, HDL/IP integration, FPGA-based DSP</p>
   <p><strong>Embedded</strong> ARM Cortex-M, TI C2000, STM32, PIC</p>
-  <p><strong>DSP</strong> FIR filter banks, Volterra kernels, PCA, real-time convolution, PWM-based DAC</p>
+  <p><strong>DSP</strong> FIR filter banks, systolic FIR structures, Volterra kernels, PCA, PWM-based DAC, real-time audio processing</p>
   <p><strong>Hardware</strong> ADC/DAC, DMA, SRAM, analog signal conditioning, motor control, power electronics</p>
   <p><strong>Protocols</strong> I²C, I²S, SPI, UART/RS-485, USB, Modbus RTU/TCP</p>
-  <p><strong>Tools</strong> Altium Designer, SolidWorks, MATLAB/Simulink</p>
+  <p><strong>Simulation &amp; Verification</strong> MATLAB/Simulink, PLECS (model-in-the-loop with embedded C), Proteus, LTspice (basic), hardware-in-the-loop on FPGA</p>
+  <p><strong>Tools</strong> Altium Designer, SolidWorks, Code Composer Studio, Vivado</p>
+  <p><strong>Industrial</strong> PLC/HMI (Siemens, Kinco), burst-fire control, multi-channel process control</p>
 </section>
 
 <footer class="container">
