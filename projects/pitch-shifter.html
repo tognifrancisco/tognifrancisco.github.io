@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time Pitch Shifter — Francisco Togni</title>
-  <meta name="description" content="Real-time pitch shifter on STM32 with 2 ms latency, correlated to musical intervals.">
+  <title>Time-Domain Pitch Shifting — Francisco Togni</title>
+  <meta name="description" content="Two time-domain pitch shifting methods: Doppler-based on TI TM4C, and weighted granular decimation of an oversampled buffer (MATLAB).">
   <meta name="theme-color" content="#0f1419">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,9 +26,9 @@
 
 <header class="hero">
   <div class="container">
-    <h1>Real-Time Pitch Shifter</h1>
-    <p class="tagline">Adaptive decimation · 2 ms latency · STM32</p>
-    <p class="subtitle">Embedded DSP · 2023</p>
+    <h1>Time-Domain Pitch Shifting for Real-Time Audio</h1>
+    <p class="tagline">Doppler-based shifter · Weighted granular decimation</p>
+    <p class="subtitle">Embedded DSP · 2023 – 2025</p>
     <a class="back-link" href="../index.html">← Back to portfolio</a>
   </div>
 </header>
@@ -36,83 +36,147 @@
 <div class="container project-detail">
 
   <section>
-    <span class="status status-completed">Completed · 2023</span>
+    <span class="status status-completed">Implemented · 2023 (Doppler)</span>
+    <span class="status status-preprint">Preprint · 2025 (Decimation)</span>
     <h2>Overview</h2>
     <p class="overview">
-      A real-time pitch shifter implemented on an STM32 Black Pill 
-      microcontroller, correlated to musical intervals in both just 
-      and equal temperament scales. The system achieves 2 ms end-to-end 
-      latency at 44.1 kHz sampling.
+      Design and validation of two time-domain pitch shifting methods for 
+      embedded platforms. Both avoid the FFT and the phase management of a 
+      phase vocoder, targeting low latency and integer-only arithmetic on 
+      small microcontrollers.
     </p>
   </section>
 
   <section>
-    <h2>Problem</h2>
+    <h2>Method 1 — Doppler-Based Pitch Shifter (2023)</h2>
     <p>
-      Real-time pitch shifting usually involves trade-offs between latency, 
-      quality, and computational cost. Achieving low latency on a 
-      microcontroller (rather than a dedicated DSP or FPGA) requires an 
-      efficient algorithm and careful firmware optimization.
+      A time-domain pitch shifter based on the Doppler effect, using two 
+      read pointers in a circular buffer that are crossfaded. A single 
+      variable delay line can't maintain a constant transposition — the 
+      read pointer eventually catches up to the write pointer. The two-pointer 
+      crossfade solves this: while one pointer fades out at the end of its 
+      admissible range, the other fades in.
     </p>
-  </section>
-
-  <section>
-    <h2>Solution</h2>
     <p>
-      An adaptive decimation algorithm that shifts the pitch in musical 
-      intervals rather than arbitrary frequency ratios. This allows the 
-      pitch shift to remain musically coherent across the scale (both 
-      just and equal temperament), while keeping the computational cost 
-      low enough to run in real time on an ARM Cortex-M4F.
+      The shift is correlated to musical intervals in both just intonation 
+      and equal temperament. The firmware was implemented in C on an ARM 
+      Cortex-M4F (Tiva C TM4C123G, TM4C123GH6PM at 80 MHz), running bare-metal 
+      with two hardware timers — one for ADC sampling, one for DAC update. 
+      End-to-end latency is 2 ms at 44.1 kHz. The algorithm works on 
+      polyphonic signals; known artifacts are transient duplication and 
+      detuning, both inherent to the Doppler time-domain approach.
     </p>
-  </section>
-
-  <section>
-    <h2>Architecture</h2>
     <ul>
-      <li><strong>Platform:</strong> STM32 Black Pill (ARM Cortex-M4F)</li>
-      <li><strong>Language:</strong> C firmware</li>
-      <li><strong>Sampling rate:</strong> 44.1 kHz</li>
-      <li><strong>End-to-end latency:</strong> 2 ms</li>
-      <li><strong>Algorithm:</strong> adaptive decimation correlated to musical intervals</li>
+      <li><strong>Platform:</strong> TI TM4C123G (ARM Cortex-M4F at 80 MHz)</li>
+      <li><strong>Language:</strong> C firmware, bare-metal</li>
+      <li><strong>Sampling:</strong> 44.1 kHz</li>
+      <li><strong>Latency:</strong> 2 ms end-to-end</li>
+      <li><strong>Algorithm:</strong> Doppler effect with two crossfaded read pointers</li>
       <li><strong>Scales:</strong> just intonation and equal temperament</li>
+      <li><strong>Analog front-end:</strong> 2nd-order multiple-feedback anti-aliasing filter (fc ≈ 20 kHz), 4-bit R2R DAC + comparator for successive-approximation ADC (12-bit → 16-bit effective resolution)</li>
+      <li><strong>Analog output:</strong> 4-level differential PWM DAC (16 bits split as 2×8 bits), carrier 312.5 kHz from 80 MHz clock, 1:256 resistor weighting, RC low-pass</li>
+      <li><strong>Interface:</strong> quadrature encoder with axial switch — full-resolution direction detection via single-line interrupt with edge toggle</li>
+      <li><strong>Status:</strong> implemented and validated on hardware (TP_FF, 2023)</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Method 2 — Weighted Granular Decimation of an Oversampled Buffer (2025)</h2>
+    <p>
+      A method that combines two ideas from different domains: oversampling 
+      with decimation for effective resolution gain (an ADC technique) and 
+      asynchronous full-buffer reading for pitch control (an audio technique). 
+      A circular buffer of length L = 4ⁿ is written at f_so = L·f_s and read 
+      as a whole at a synthesis rate f_sr = α·f_s. The ratio α = f_sr / f_s 
+      controls the pitch: α &lt; 1 produces a higher pitch (samples are 
+      skipped), α &gt; 1 produces a lower pitch (samples are repeated).
+    </p>
+    <p>
+      The output is a weighted sum of the entire buffer — not a single sample 
+      — so there is no phase discontinuity at block boundaries. The Hann 
+      window is scaled to a power of two so that normalization is a bit shift 
+      (L = 16, Q = 12, coefficients sum to 4096). Decimation is also a shift: 
+      sum L samples and shift right n bits, not divide by L. An analog 
+      pre-emphasis filter (first-order shelving) compensates for the sinc 
+      rolloff of the averaging filter, about 3.9 dB at Nyquist.
+    </p>
+    <ul>
+      <li><strong>Method:</strong> weighted granular decimation of an oversampled buffer</li>
+      <li><strong>Oversampling factor:</strong> L = 4ⁿ (L = 16, n = 2 bits resolution gain)</li>
+      <li><strong>Window:</strong> Hann scaled to a power of two (Q = 12, Σ w̃ = 4096)</li>
+      <li><strong>Decimation:</strong> sum + bit shift (not division)</li>
+      <li><strong>Pre-emphasis:</strong> analog shelving filter, inverse of sinc response</li>
+      <li><strong>Complexity:</strong> O(L) per output sample, ~48–64 cycles for L = 16</li>
+      <li><strong>Validation:</strong> MATLAB simulation at 44.1 kHz</li>
+      <li><strong>Planned implementation:</strong> STM32 BlackPill (ARM Cortex-M4F)</li>
+      <li><strong>Status:</strong> preprint, simulated; hardware implementation planned</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Why time-domain and not phase vocoder?</h2>
+    <p>
+      The phase vocoder gives good quality but introduces phasiness artifacts 
+      on polyphonic signals and costs O(N log N) per frame with FFT and iFFT. 
+      Both methods here are pure time-domain, O(L) per sample with small L, 
+      no FFT, no pitch estimation, no phase management. The tradeoff is a 
+      limited pitch range and, for the Doppler method, transient artifacts — 
+      which are documented honestly.
+    </p>
   </section>
 
   <section>
     <h2>My role</h2>
     <p>
-      R&amp;D of the pitch shifting algorithm, C firmware implementation, 
-      optimization for real-time operation on ARM Cortex-M4F, and latency 
-      characterization.
+      R&amp;D of both algorithms. For the Doppler shifter: full analog 
+      front-end design (anti-aliasing filter, 4-bit R2R DAC + comparator 
+      successive-approximation ADC, protection), C firmware on the Tiva C 
+      (two timers, encoder interface, PWM DAC output), and hardware 
+      characterization. For the decimation method: mathematical derivation 
+      (noise model, ENOB gain, decimation via bit shift, Hann scaling to 
+      power of two, pre-emphasis compensation), MATLAB simulation, and 
+      pseudocode for the two-timer implementation with double buffering.
     </p>
   </section>
 
   <section>
     <h2>Results</h2>
     <ul>
-      <li>End-to-end latency: 2 ms</li>
-      <li>44.1 kHz sampling on ARM Cortex-M4F</li>
-      <li>Musically coherent shifting in just and equal temperament</li>
-      <li>Real-time operation on low-cost MCU (no dedicated DSP)</li>
+      <li>Doppler method: 2 ms end-to-end latency on Tiva C at 44.1 kHz, working on polyphonic signals</li>
+      <li>Doppler method: 4 bits of ADC resolution recovered via successive approximation</li>
+      <li>Decimation method: mathematical model complete, simulated in MATLAB at 44.1 kHz</li>
+      <li>Decimation method: expected ENOB gain of 2 bits (12 → 14), CPU load under 5% at 44.1 kHz on a 100 MHz Cortex-M4</li>
+      <li>Decimation method: preprint available</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Publication</h2>
+    <p>
+      Pitch Shifting by Weighted Granular Decimation of an Oversampled Buffer. 
+      Preprint, 2025.
+    </p>
   </section>
 
   <section>
     <h2>Stack</h2>
     <div class="stack">
-      <span>STM32</span>
+      <span>TI TM4C123G</span>
       <span>ARM Cortex-M4F</span>
       <span>Embedded C</span>
+      <span>MATLAB</span>
       <span>DSP</span>
       <span>Real-Time Audio</span>
-      <span>Adaptive Decimation</span>
+      <span>Oversampling</span>
+      <span>Decimation</span>
+      <span>PWM DAC</span>
+      <span>R2R DAC</span>
     </div>
   </section>
 
   <section>
     <h2>Media</h2>
-    <p><em>Media coming soon — audio samples, algorithm block diagram, latency measurement.</em></p>
+    <p><em>Media coming soon — algorithm block diagrams, PWM DAC schematic, MATLAB frequency response.</em></p>
   </section>
 
 </div>
