@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Audio Equalizer on FPGA — Francisco Togni</title>
-  <meta name="description" content="160-tap FIR filter bank equalizer with 4-level PWM-based DAC on FPGA.">
+  <meta name="description" content="5-band FIR filter bank equalizer with 4-level PWM-based DAC on FPGA.">
   <meta name="theme-color" content="#0f1419">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +27,7 @@
 <header class="hero">
   <div class="container">
     <h1>Digital Audio Equalizer on FPGA</h1>
-    <p class="tagline">160-tap FIR filter bank · 4-level PWM DAC</p>
+    <p class="tagline">5-band FIR filter bank · 4-level PWM DAC</p>
     <p class="subtitle">Published at AADECA 2023</p>
     <a class="back-link" href="../index.html">← Back to portfolio</a>
   </div>
@@ -39,10 +39,11 @@
     <span class="status status-published">Published · AADECA 2023</span>
     <h2>Overview</h2>
     <p class="overview">
-      An FPGA implementation of a digital audio equalizer using a 
-      multi-band FIR filter bank and a 4-level PWM-based output DAC 
-      topology. The design achieves high audio quality at 44.1 kHz 
-      sampling with low FPGA resource usage.
+      An FPGA implementation of a 5-band parallel graphic audio equalizer 
+      using a symmetric systolic FIR filter bank and a 4-level differential 
+      PWM-based output DAC topology. The design achieves high audio quality 
+      at 44.1 kHz sampling with one DSP48 slice per filter and latency of 
+      1.5 ms per mono channel.
     </p>
   </section>
 
@@ -50,48 +51,62 @@
     <h2>Problem</h2>
     <p>
       Digital audio equalization typically requires high-order FIR filters 
-      that consume significant FPGA resources. Additionally, the output 
-      stage needs a DAC with enough resolution for high-fidelity audio. 
-      Both challenges must be solved with limited hardware budget.
+      that consume significant FPGA resources, and an output DAC with enough 
+      resolution for high-fidelity audio — both within a limited hardware 
+      budget. A parallel filter bank also needs to avoid phase error 
+      accumulation and quantization noise between bands.
     </p>
   </section>
 
   <section>
     <h2>Solution</h2>
     <p>
-      A 160-tap FIR filter bank architecture optimized for parallel 
-      processing in the FPGA, combined with a 4-level PWM-based output 
-      DAC topology that achieves the required effective resolution using 
-      only digital output pins and a simple analog reconstruction filter.
+      A 5-band parallel graphic equalizer built around symmetric systolic FIR 
+      filters — each band implemented with one Xilinx DSP48 slice thanks to 
+      oversampling and pipelining. The output uses a 4-level differential 
+      PWM-based DAC: each half-cycle's 12-bit sample is split into 7 LSBs and 
+      5 MSBs driving two PWMs, summed with a weighted differential analog 
+      stage and filtered with a 3rd-order Sallen-Key low-pass filter. The 
+      input stage uses active precision rectification and parallel sampling 
+      of both half-cycles to increase dynamic range and reject common-mode 
+      noise.
     </p>
   </section>
 
   <section>
     <h2>Architecture</h2>
     <ul>
-      <li><strong>Filter:</strong> 160-tap FIR filter bank</li>
+      <li><strong>Bands:</strong> 5-band parallel graphic EQ (150 Hz, 700 Hz, 2 kHz, 4 kHz, 8 kHz)</li>
+      <li><strong>Filters:</strong> FIR, order 170 per band, symmetric systolic structure, one DSP48 slice per filter</li>
+      <li><strong>Fixed-point format:</strong> I1Q12 (1 integer, 12 fractional), truncation blocks between stages</li>
       <li><strong>Sampling rate:</strong> 44.1 kHz</li>
-      <li><strong>Output stage:</strong> 4-level PWM-based DAC topology</li>
-      <li><strong>Target:</strong> FPGA (Verilog / HDL-RTL)</li>
-      <li><strong>Design goal:</strong> low FPGA resource usage while maintaining audio quality</li>
+      <li><strong>Input stage:</strong> analog preamp (+6 dB), active precision rectifier, parallel sampling of in-phase and counter-phase half-cycles</li>
+      <li><strong>Output stage:</strong> 4-level differential PWM DAC (7 LSB + 5 MSB per half-cycle), carrier 705.6 kHz from a 90.3168 MHz system clock, 1:256 resistor ratio, 3rd-order Sallen-Key LPF</li>
+      <li><strong>Coefficients:</strong> designed in MATLAB Filter Designer, quantized</li>
+      <li><strong>Target:</strong> Artix-7 XC7A35T (Digilent Basys 3)</li>
     </ul>
   </section>
 
   <section>
     <h2>My role</h2>
     <p>
-      Design and implementation of the FIR filter bank, PWM DAC topology, 
-      RTL synthesis, hardware validation, and authoring of the resulting 
-      publication.
+      Design and implementation of the FIR filter bank (systolic structure, 
+      fixed-point format, truncation stages), the 4-level differential PWM 
+      DAC topology, the analog input conditioning (precision rectifier, 
+      parallel sampling), RTL synthesis and timing closure in Vivado, 
+      hardware validation on the Basys 3 platform, and authoring of the 
+      resulting publication.
     </p>
   </section>
 
   <section>
     <h2>Results</h2>
     <ul>
-      <li>160-tap FIR filter bank at 44.1 kHz sampling</li>
-      <li>Low FPGA resource usage</li>
-      <li>Novel 4-level PWM-based output DAC topology</li>
+      <li>5-band FIR filter bank, order 170 per band, one DSP48 slice per filter</li>
+      <li>Latency of approximately 1.5 ms per mono filter (well below the ~10 ms audio standard)</li>
+      <li>Noise floor of −60 dBVrms</li>
+      <li>Ripple &lt; ±2 dB across most of the measured spectrum</li>
+      <li>Novel 4-level differential PWM-based output DAC topology with 1:256 resistor weighting</li>
       <li>Published in Proc. 28th AADECA Congress, 2023</li>
     </ul>
   </section>
@@ -99,10 +114,10 @@
   <section>
     <h2>Publication</h2>
     <p>
-      F. Togni et al., "Digital Audio Equalizer Implementation using an FPGA 
-      with FIR Filter Bank Structure and 4-Level PWM-Based Output DAC 
-      Topology," in <em>Proc. 28th AADECA Congress</em>, University of 
-      Palermo, Buenos Aires, 2023.
+      F. Togni, F. Aguilera, and G. A. Magallán, "Digital Audio Equalizer 
+      Implementation using an FPGA with FIR Filter Bank Structure and 
+      4-Level PWM-Based Output DAC Topology," in <em>Proc. 28th AADECA 
+      Congress</em>, University of Palermo, Buenos Aires, 2023.
     </p>
     <p>
       <a href="https://www.researchgate.net/publication/375450327" target="_blank" rel="noopener">Read on ResearchGate →</a>
@@ -114,11 +129,13 @@
     <div class="stack">
       <span>FPGA</span>
       <span>Verilog</span>
+      <span>Xilinx Vivado</span>
       <span>FIR Filters</span>
-      <span>DSP</span>
+      <span>Systolic Structure</span>
+      <span>DSP48</span>
+      <span>Fixed-Point I1Q12</span>
       <span>PWM DAC</span>
       <span>Audio</span>
-      <span>Xilinx</span>
     </div>
   </section>
 
