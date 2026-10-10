@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FPGA Fault Detection for Power Inverters — Francisco Togni</title>
-  <meta name="description" content="Low-latency FPGA architecture for open-switch fault detection in electric drive power inverters.">
+  <meta name="description" content="Low-latency FPGA architecture for open-switch fault detection in electric drive power inverters. 10% of electrical period, 6% LUTs on Artix-7.">
   <meta name="theme-color" content="#0f1419">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,62 +39,85 @@
     <span class="status status-published">Published · CAE 2026</span>
     <h2>Overview</h2>
     <p class="overview">
-      An FPGA architecture for real-time open-switch fault detection in 
-      power semiconductor devices used in electric drive inverters. The 
-      design achieves detection latency as low as 10% of the electrical 
-      period, using only 5% of FPGA resources at a 100 MHz base clock.
+      An FPGA-based strategy for detecting and isolating open-circuit faults 
+      in the power switches of electric-drive inverters. The method exploits 
+      the characteristic behavior of phase currents in the zero-crossing 
+      region, combining lightweight EMA filtering, a hysteresis band, a 
+      Newton-Raphson time estimator, and derivative-sign analysis. Detection 
+      latency is approximately 10% of the electrical period, using about 6% 
+      of LUTs and 5% of flip-flops on an Artix-7 XC7A35T at 100 MHz.
     </p>
   </section>
 
   <section>
     <h2>Problem</h2>
     <p>
-      Open-switch faults in inverter power semiconductors can cause 
-      degraded torque, overcurrent in healthy phases, and cascading 
-      failures if not detected quickly. Conventional software-based 
-      diagnosis runs on the main controller and introduces latency that 
-      may be too high for high-dynamic electric drives.
+      Open-circuit faults in inverter switches do not stop the drive 
+      abruptly like short-circuits do. Instead, they subtly distort phase 
+      currents, cause unbalanced conduction, induce torque ripple, and 
+      create long-term thermal and electrical stress on the remaining 
+      components — which can lead to secondary failures. Fast, reliable 
+      diagnosis is essential for industrial drives, traction systems, and 
+      high-dependability applications.
     </p>
   </section>
 
   <section>
     <h2>Solution</h2>
     <p>
-      A dedicated FPGA architecture that executes the fault detection 
-      algorithm in hardware, parallel to the main control loop. The design 
-      is pipelined for minimum latency and integrated with the power stage 
-      for hardware validation.
+      A model-free, current-based method implemented entirely in FPGA using 
+      fixed-point arithmetic. The algorithm uses only measured phase currents 
+      — no additional sensors, no coordinate transformations, no observers. 
+      It combines:
     </p>
+    <ul>
+      <li>An exponential moving average (EMA) filter for noise reduction — α chosen as a power of two (0.5 or 0.25) so it maps to shifts</li>
+      <li>A hysteresis band around zero (±15% of dynamic range) to define the zero-crossing region robustly against noise</li>
+      <li>A time estimator based on Newton-Raphson linear approximation: s[k] = −y[k] / ẏ[k], where ẏ[k] is the backward Euler derivative</li>
+      <li>A zero-crossing integrator that counts the actual samples inside the hysteresis band</li>
+      <li>A comparator: fault is reported when the integrator exceeds the estimated time</li>
+      <li>Fault isolation using the signs of the current derivatives to distinguish upper vs. lower switch faults</li>
+      <li>A simultaneous zero-crossing detector that disables diagnosis during cross-switch transients</li>
+    </ul>
   </section>
 
   <section>
     <h2>Architecture</h2>
     <ul>
-      <li><strong>Target:</strong> Xilinx FPGA (Vivado flow)</li>
-      <li><strong>Language:</strong> Verilog / HDL-RTL</li>
-      <li><strong>Algorithm:</strong> real-time open-switch detection based on current signature analysis</li>
+      <li><strong>Target:</strong> Artix-7 XC7A35T (Digilent Basys 3)</li>
+      <li><strong>Language:</strong> Verilog HDL, simulated in Vivado</li>
+      <li><strong>Fixed-point format:</strong> Q12 (0 integer bits, 12 fractional bits), two's complement</li>
+      <li><strong>ADC:</strong> dual-channel 12-bit, 1 MSPS; sampled in parallel at 3 kS/s; phase c reconstructed as i_c = −i_a − i_b</li>
+      <li><strong>Divider:</strong> Vivado IP, radix-2, signed two's complement</li>
       <li><strong>Base clock:</strong> 100 MHz</li>
-      <li><strong>Resource usage:</strong> ~5% of FPGA</li>
-      <li><strong>Detection latency:</strong> 10% of electrical period (varies with drive operating frequency)</li>
+      <li><strong>Resource usage:</strong> ~6% of LUTs, ~5% of flip-flops</li>
+      <li><strong>Detection latency:</strong> ≈ 10% of the electrical period (≈ 0.1 T)</li>
+      <li><strong>Test bench:</strong> 0.75 kW induction motor, 48 V DC bus, controlled by a TMS320F28335 DSP running field-oriented control (FOC) and space-vector PWM at 10 kHz</li>
+      <li><strong>Current transducers:</strong> LEM LA 50-S/SP1 closed-loop Hall-effect</li>
+      <li><strong>Fault injection:</strong> deactivating switching signals from the DSP</li>
+      <li><strong>Logic analyzer:</strong> Saleae Logic 8 for latency measurement</li>
     </ul>
   </section>
 
   <section>
     <h2>My role</h2>
     <p>
-      R&D and FPGA implementation: algorithm study, RTL design, pipelining 
-      and optimization, timing closure, integration with the power 
-      electronics hardware, and validation. Co-author of the resulting 
-      publication.
+      R&D and FPGA implementation: algorithm study, RTL design in Verilog, 
+      pipelining and optimization, fixed-point design (Q12), timing closure 
+      in Vivado, integration with the power electronics hardware, and full 
+      experimental validation — MATLAB simulation of each module, Proteus, 
+      hardware-in-the-loop on the Artix-7, and bench testing on a real 
+      induction motor drive. Co-author of the resulting publication.
     </p>
   </section>
 
   <section>
     <h2>Results</h2>
     <ul>
-      <li>Detection latency: 10% of the electrical period</li>
-      <li>FPGA resource usage: 5% at 100 MHz base clock</li>
-      <li>Hardware-validated on a real electric drive</li>
+      <li>Detection latency: ≈ 10% of the electrical period (≈ 0.1 T), an order of magnitude faster than most phase-current-based methods reported in the literature (typically ≤ 1 T)</li>
+      <li>FPGA resource usage: ~6% LUTs, ~5% flip-flops on Artix-7 XC7A35T</li>
+      <li>Validated in simulation (MATLAB, Proteus), hardware-in-the-loop, and bench testing on a 0.75 kW induction motor drive</li>
+      <li>Correct isolation between upper and lower switch faults, including single-switch, full-leg, and cross-switch scenarios</li>
       <li>Published in Proc. 8th Argentine Conference on Electronics (CAE), UNT, 2026</li>
     </ul>
   </section>
@@ -102,9 +125,10 @@
   <section>
     <h2>Publication</h2>
     <p>
-      F. Togni et al., "Low-Latency Architecture for Open-Circuit Fault 
-      Diagnosis in Electric Drive Inverter Power Switches," in 
-      <em>Proc. 8th Argentine Conference on Electronics (CAE)</em>, UNT, 2026.
+      F. Togni, G. R. Bossio, L. E. Venghi, and F. Aguilera, "Low-Latency 
+      Architecture for Open-Circuit Fault Diagnosis in Electric Drive 
+      Inverter Power Switches," in <em>Proc. 8th Argentine Conference on 
+      Electronics (CAE)</em>, UNT, 2026.
     </p>
     <p>
       <a href="https://ieeexplore.ieee.org/document/11450328" target="_blank" rel="noopener">Read on IEEE Xplore →</a>
@@ -116,13 +140,17 @@
     <div class="stack">
       <span>Verilog</span>
       <span>Xilinx Vivado</span>
+      <span>Artix-7</span>
       <span>RTL Design</span>
+      <span>Fixed-Point Q12</span>
       <span>Timing Analysis</span>
       <span>FPGA</span>
       <span>DSP</span>
       <span>Power Electronics</span>
       <span>Electric Drives</span>
       <span>Fault Detection</span>
+      <span>MATLAB</span>
+      <span>Proteus</span>
     </div>
   </section>
 
